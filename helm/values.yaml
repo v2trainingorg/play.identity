@@ -31,4 +31,4 @@ certificate:
   secretName: signing-cert
   hostname: playeconomy.eastus.cloudapp.azure.com
 
-identityClientId: b68260b6-466a-4483-b432-6df6f7073df1
+identityClientId: f58160af-50e1-45c3-9885-7c287d3b2982
