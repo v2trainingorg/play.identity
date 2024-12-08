@@ -47,7 +47,7 @@ jobs:
           TF_VAR_location: eastus           
           TF_VAR_service_principal_client_id: ${{ secrets.SERVICE_PRINCIPAL_CLIENT_ID }} 
           TF_VAR_key_vault_name: ${{ secrets.APP_NAME }}        
-          TF_VAR_namespace: identity        
+          TF_VAR_namespace: identity              
           TF_VAR.admin_username: github         
 
       - name: Terraform Apply 
@@ -60,5 +60,5 @@ jobs:
           TF_VAR_location: eastus           
           TF_VAR_service_principal_client_id: ${{ secrets.SERVICE_PRINCIPAL_CLIENT_ID }} 
           TF_VAR_key_vault_name: ${{ secrets.APP_NAME }}        
-          TF_VAR_namespace: identity   
+          TF_VAR_namespace: identity              
           TF_VAR.admin_username: github      

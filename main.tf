@@ -28,6 +28,7 @@ variable "key_vault_name" {
   description = "The name of the key vault"
 }
 
+
 terraform { 
   required_providers { 
     azurerm = { 
@@ -42,18 +43,42 @@ provider "azurerm" {
   features {}
 }
 
+
+data "azurerm_kubernetes_cluster" "yes" { 
+  name = var.app_name 
+  resource_group_name = var.resource_group_name 
+} 
+output "aks_oidc_issuer_url" { value = data.azurerm_kubernetes_cluster.yes.oidc_issuer_profile[0].issuer_url }
+
+
 resource "azurerm_user_assigned_identity" "id" {
   resource_group_name = var.resource_group_name
   location            = var.location
   name                = var.namespace
 }
 
+
+resource "azurerm_user_assigned_identity_federated_credential" "identity" {
+  name                = var.namespace
+  resource_group_name = var.resource_group_name
+  location            = var.location
+  managed_identity_id = azurerm_user_assigned_identity.id.id
+  issuer              = data.azurerm_kubernetes_cluster.yes.oidc_issuer_profile[0].issuer_url
+  subject             = "system:serviceaccount:${var.namespace}:${var.namespace}-serviceaccount"
+
+  depends_on = [
+    azurerm_user_assigned_identity.id
+  ]
+}
+
+
 data "azurerm_key_vault" "kv" {
-  name                = var.key_vault_name
+  name = var.key_vault_name
   resource_group_name = var.resource_group_name
 }
 
-resource "azurerm_key_vault_access_policy" "example" {
+
+resource "azurerm_key_vault_access_policy" "policy" {
   key_vault_id = data.azurerm_key_vault.kv.id
   tenant_id    = var.tenant_id
   object_id    = azurerm_user_assigned_identity.id.principal_id
@@ -62,11 +87,4 @@ resource "azurerm_key_vault_access_policy" "example" {
     "Get",
     "List",
   ]
-}
-
-data "azurerm_client_config" "example" {}
-
-data "azurerm_kubernetes_cluster" "mycluster" {
-  name                = var.app_name
-  resource_group_name = var.resource_group_name
 }
