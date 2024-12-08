@@ -1,7 +1,3 @@
-provider "azurerm" {
-  features {}
-}
-
 variable "app_name" {
   type = string  
   description = "The name of the application and resource group"
@@ -32,6 +28,19 @@ variable "key_vault_name" {
   description = "The name of the key vault"
 }
 
+terraform { 
+  required_providers { 
+    azurerm = { 
+      source = "hashicorp/azurerm" 
+      version = "~> 3.0" 
+    } 
+  } 
+  backend "azurerm" {}
+}
+
+provider "azurerm" {
+  features {}
+}
 
 resource "azurerm_user_assigned_identity" "id" {
   resource_group_name = var.resource_group_name
@@ -50,8 +59,8 @@ resource "azurerm_key_vault_access_policy" "example" {
   object_id    = azurerm_user_assigned_identity.id.principal_id
 
   secret_permissions = [
-    "get",
-    "list",
+    "Get",
+    "List",
   ]
 }
 
@@ -60,12 +69,4 @@ data "azurerm_client_config" "example" {}
 data "azurerm_kubernetes_cluster" "mycluster" {
   name                = var.app_name
   resource_group_name = var.resource_group_name
-}
-
-resource "azurerm_user_assigned_identity_federated_credential" "example" {
-  name                = var.namespace
-  resource_group_name = var.resource_group_name
-  identity_name       = azurerm_user_assigned_identity.id.name
-  issuer              = data.azurerm_kubernetes_cluster.mycluster.oidc_issuer_url
-  subject             = "system:serviceaccount:${var.namespace}:${var.namespace}-serviceaccount"
 }
