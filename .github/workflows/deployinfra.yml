@@ -77,8 +77,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Azure CLI
-        uses: azure/CLI@v1
+      
 
       - name: Azure Login
         uses: Azure/login@v1
@@ -90,9 +89,11 @@ jobs:
             # Azure subscriptionId
             subscription-id: ${{secrets.SUBSCRIPTION_ID}}   
       
-      - name: Establish Federated Identity Credential
-        run: |
-          appname=${{ secrets.APP_NAME }}
-          namespace=identity
-          AKS_OIDC_ISSUER=$(az aks show -g $appname -n $appname --query oidcIssuerProfile.issuerUrl -o tsv)
-          az identity federated-credential create --name $namespace --identity-name $namespace --resource-group $appname --issuer $AKS_OIDC_ISSUER --subject "system:serviceaccount:${namespace}:${namespace}-serviceaccount"
+      - name: Set up Azure CLI and run commands
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |        
+            appname=${{ secrets.APP_NAME }}
+            namespace=identity
+            AKS_OIDC_ISSUER=$(az aks show -g $appname -n $appname --query oidcIssuerProfile.issuerUrl -o tsv)
+            az identity federated-credential create --name $namespace --identity-name $namespace --resource-group $appname --issuer $AKS_OIDC_ISSUER --subject "system:serviceaccount:${namespace}:${namespace}-serviceaccount"
