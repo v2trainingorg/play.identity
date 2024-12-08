@@ -48,7 +48,7 @@ data "azurerm_kubernetes_cluster" "yes" {
   name = var.app_name 
   resource_group_name = var.resource_group_name 
 } 
-output "aks_oidc_issuer_url" { value = data.azurerm_kubernetes_cluster.yes.oidc_issuer_profile[0].issuer_url }
+output "aks_oidc_issuer_url" { value = data.azurerm_kubernetes_cluster.yes.oidc_issuer_url }
 
 
 resource "azurerm_user_assigned_identity" "id" {
@@ -58,17 +58,10 @@ resource "azurerm_user_assigned_identity" "id" {
 }
 
 
-resource "azurerm_user_assigned_identity_federated_credential" "identity" {
-  name                = var.namespace
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  managed_identity_id = azurerm_user_assigned_identity.id.id
-  issuer              = data.azurerm_kubernetes_cluster.yes.oidc_issuer_profile[0].issuer_url
-  subject             = "system:serviceaccount:${var.namespace}:${var.namespace}-serviceaccount"
-
-  depends_on = [
-    azurerm_user_assigned_identity.id
-  ]
+resource "azurerm_role_assignment" "fed" {
+  principal_id   = azurerm_user_assigned_identity.id.principal_id
+  role_definition_name = "Managed Identity Operator"
+  scope          = data.azurerm_kubernetes_cluster.yes.id
 }
 
 
