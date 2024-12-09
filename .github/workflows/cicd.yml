@@ -142,8 +142,15 @@ jobs:
       - name: Deploy Signing Cert
         run: |
           kubectl apply -f ./kubernetes/signing-cer.yaml -n identity
-      
+
+      - name: Fetch Secret Name 
+        id: fetch-secret 
+        run: | 
+          SECRET_NAME=$(kubectl get secret -n identity -o jsonpath="{.items[?(@.metadata.name=='signing-cert')].metadata.name}") 
+          echo "SECRET_NAME=$SECRET_NAME" >> $GITHUB_ENV
+
       - name: Deploy Identity Service
         run: |
-          kubectl apply -f ./kubernetes/identity.yaml -n identity     
+          envsubst < ./kubernetes/identity.yaml > ./kubernetes/identity-subst.yaml
+          kubectl apply -f ./kubernetes/identity-subst.yaml -n identity           
       

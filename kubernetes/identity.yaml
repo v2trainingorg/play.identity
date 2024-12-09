@@ -53,7 +53,7 @@ spec:
       volumes:
         - name: certificate-volume
           secret:
-            secretName: signing-cert
+            secretName: "${SECRET_NAME}"
             items:
               - key: tls.key
                 path: certificate.key
