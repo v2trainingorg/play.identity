@@ -146,7 +146,8 @@ jobs:
       - name: Fetch Secret Name 
         id: fetch-secret 
         run: | 
-          SECRET_NAME=$(kubectl get secret -n identity -o jsonpath="{.items[?(@.metadata.name=='signing-cert')].metadata.name}") 
+          SECRET_NAME=$(kubectl get secret -n identity -o jsonpath="{.items[?(@.metadata.name | startswith('signing-cert'))].metadata.name}")
+          if [ -z "$SECRET_NAME" ]; then exit 1; fi
           echo "SECRET_NAME=$SECRET_NAME" >> $GITHUB_ENV
 
       - name: Deploy Identity Service
