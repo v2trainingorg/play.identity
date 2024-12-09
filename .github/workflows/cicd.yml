@@ -141,9 +141,9 @@ jobs:
 
       - name: Deploy Signing Cert
         run: |
-          kubectl apply -f ./kubernetes/signing-cer.yaml
+          kubectl apply -f ./kubernetes/signing-cer.yaml -n identity
       
       - name: Deploy Identity Service
         run: |
-          kubectl apply -f ./kubernetes/identity.yaml      
+          kubectl apply -f ./kubernetes/identity.yaml -n identity     
       
