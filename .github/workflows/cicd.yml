@@ -65,7 +65,9 @@ jobs:
   build-and-push-dockerimage:
 
     runs-on: ubuntu-latest
-    needs: package-and-publish-contracts 
+    needs: 
+      - generate-version
+      - package-and-publish-contracts 
       
     permissions:
       id-token: write
