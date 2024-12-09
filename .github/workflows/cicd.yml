@@ -92,11 +92,11 @@ jobs:
     - name: Build and push Docker image
       uses: docker/build-push-action@v3
       with:
-        secrets: |
-          "GH_OWNER=${{github.repository_owner}}"
-          "GH_PAT=${{secrets.GH_PAT}}"
-        tags: ${{secrets.APP_NAME}}.azurecr.io/play.identity:${{ env.NEW_VERSION }}
+        context: .
         push: true
+        tags: ${{secrets.APP_NAME}}.azurecr.io/play.identity:${{ env.NEW_VERSION }}
+        secrets: |          
+          GH_PAT=${{secrets.GH_PAT}}
 
 
   deploy-identity-service:
