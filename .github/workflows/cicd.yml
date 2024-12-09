@@ -35,10 +35,13 @@ jobs:
     permissions:
       contents: read
       packages: write        
-
+      
     steps:
     - uses: actions/checkout@v3
     
+    - name: Print new version to logs 
+      run: echo "The new version is ${{ needs.generate-version.outputs.new_version }}"
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
