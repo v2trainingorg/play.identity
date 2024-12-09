@@ -15,7 +15,7 @@ spec:
       serviceAccountName: identity-serviceaccount
       containers:
         - name: identity
-          image: v2train.azurecr.io/play.identity:1.0.10
+          image: v2train.azurecr.io/play.identity:1.0.12
           env:
             - name: ServiceSettings__MessageBroker
               value: SERVICEBUS
@@ -79,6 +79,6 @@ kind: ServiceAccount
 metadata:
   name: identity-serviceaccount
   annotations:
-    azure.workload.identity/client-id: b68260b6-466a-4483-b432-6df6f7073df1
+    azure.workload.identity/client-id: ${{ secrets.IDENTITY_CLIENT_ID }}
   labels:
     azure.workload.identity/use: "true"
