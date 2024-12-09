@@ -19,7 +19,7 @@ COPY ["src/Play.Identity.Contracts/Play.Identity.Contracts.csproj", "src/Play.Id
 COPY ["src/Play.Identity.Service/Play.Identity.Service.csproj", "src/Play.Identity.Service/"]
 
 # Create a temporary nuget.config file 
-RUN echo "<?xml version=\"1.0\" encoding=\"utf-8\"?><configuration><packageSources><add key=\"github\" value=\"https://nuget.pkg.github.com/$GH_OWNER/index.json\" /></packageSources><packageSourceCredentials><github><add key=\"Username\" value=\"USERNAME\" /><add key=\"ClearTextPassword\" value=\"$GH_PAT\" /></github></packageSourceCredentials></configuration>" > nuget.config
+RUN echo "<?xml version=\"1.0\" encoding=\"utf-8\"?><configuration><packageSources><add key=\"github\" value=\"https://nuget.pkg.github.com/$GH_OWNER/index.json\" /><add key=\"nuget.org\" value=\"https://api.nuget.org/v3/index.json\" /></packageSources><packageSourceCredentials><github><add key=\"Username\" value=\"USERNAME\" /><add key=\"ClearTextPassword\" value=\"$GH_PAT\" /></github></packageSourceCredentials></configuration>" > nuget.config
 
 # Add NuGet source with authentication 
 # RUN dotnet nuget add source --username USERNAME --password $GH_PAT --store-password-in-clear-text --name github "https://nuget.pkg.github.com/$GH_OWNER/index.json"
