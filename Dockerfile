@@ -19,7 +19,7 @@ COPY ["src/Play.Identity.Contracts/Play.Identity.Contracts.csproj", "src/Play.Id
 COPY ["src/Play.Identity.Service/Play.Identity.Service.csproj", "src/Play.Identity.Service/"]
 
 # Add NuGet source with authentication 
-RUN dotnet nuget add source --username USERNAME --password $GH_PAT --store-password-in-clear-text --name github "https://nuget.pkg.github.com/$GH_OWNER/index.json"
+# RUN dotnet nuget add source --username USERNAME --password $GH_PAT --store-password-in-clear-text --name github "https://nuget.pkg.github.com/$GH_OWNER/index.json"
 
 #RUN dotnet restore "src/Play.Identity.Service/Play.Identity.Service.csproj"
 RUN dotnet restore "src/Play.Identity.Service/Play.Identity.Service.csproj" --configfile <(echo "<configuration><packageSources><add key=\"github\" value=\"https://nuget.pkg.github.com/$GH_OWNER/index.json\" /></packageSources><packageSourceCredentials><github><add key=\"Username\" value=\"USERNAME\" /><add key=\"ClearTextPassword\" value=\"$GH_PAT\" /></github></packageSourceCredentials></configuration>")
