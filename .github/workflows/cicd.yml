@@ -59,7 +59,7 @@ jobs:
         -o packages
 
     - name: Publish
-      run: dotnet nuget push packages/*.nupkg            
+      run: dotnet nuget push packages/*.nupkg --skip-duplicate            
       
 
   build-and-push-dockerimage:
