@@ -143,15 +143,18 @@ jobs:
         run: |
           kubectl apply -f ./kubernetes/signing-cer.yaml -n identity
 
-      - name: Fetch Secret Name 
-        id: fetch-secret 
-        run: |
-          SECRET_NAME=$(kubectl get secret -n identity | grep 'signing-cert' | awk '{print $1}')     
-          if [ -z "$SECRET_NAME" ]; then exit 1; fi
-          echo "SECRET_NAME=$SECRET_NAME" >> $GITHUB_ENV
+      # - name: Fetch Secret Name 
+      #   id: fetch-secret 
+      #   run: |
+      #     SECRET_NAME=$(kubectl get secret -n identity | grep 'signing-cert' | awk '{print $1}')     
+      #     if [ -z "$SECRET_NAME" ]; then exit 1; fi
+      #     echo "SECRET_NAME=$SECRET_NAME" >> $GITHUB_ENV
 
+      # - name: Deploy Identity Service
+      #   run: |
+      #     envsubst < ./kubernetes/identity.yaml > ./kubernetes/identity-subst.yaml
+      #     kubectl apply -f ./kubernetes/identity-subst.yaml -n identity           
+      
       - name: Deploy Identity Service
         run: |
-          envsubst < ./kubernetes/identity.yaml > ./kubernetes/identity-subst.yaml
-          kubectl apply -f ./kubernetes/identity-subst.yaml -n identity           
-      
+          kubectl apply -f ./kubernetes/identity.yaml -n identity
