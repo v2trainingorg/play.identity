@@ -136,6 +136,10 @@ jobs:
             # Azure subscriptionId
             subscription-id: ${{secrets.SUBSCRIPTION_ID}}  
         
+            
+      - name: output Docker image tag
+        run: echo ${{ needs.build-and-push-dockerimage.outputs.docker_image_tag }}
+
       - name: Set environment variables
         run: echo "DOCKER_IMAGE=${{ needs.build-and-push-dockerimage.outputs.docker_image_tag }}" >> $GITHUB_ENV
       
