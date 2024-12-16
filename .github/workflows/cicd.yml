@@ -73,6 +73,9 @@ jobs:
       id-token: write
       contents: read
 
+    outputs: 
+      docker_image_tag: ${{ steps.set_tag.outputs.image_tag }}
+
     steps:
     - uses: actions/checkout@v3
 
