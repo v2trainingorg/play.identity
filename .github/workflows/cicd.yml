@@ -107,8 +107,8 @@ jobs:
     - name: Set Docker image tag      
       run: echo "docker_image_tag=${{ secrets.APP_NAME }}.azurecr.io/play.identity:${{ needs.generate-version.outputs.new_version }}" >> $GITHUB_ENV
 
-    - name: Verify Docker image tag
-      run: echo ${{ env.docker_image_tag }}
+    outputs:
+      docker_image_tag: ${{ env.docker_image_tag }}
 
 
   deploy-identity-service:
@@ -138,12 +138,12 @@ jobs:
        
     
       - name: Verify Docker image tag
-        run: echo ${{ env.docker_image_tag }}
+        run: echo ${{ needs.build-and-push-dockerimage.docker_image_tag }}
 
 
       - name: Set and verifyenvironment variables
         run: |
-          DOCKER_IMAGE=${{ env.docker_image_tag }}
+          DOCKER_IMAGE=${{ needs.build-and-push-dockerimage.docker_image_tag }}
           echo $DOCKER_IMAGE
    
       - name: Substitute variables in the Kubernetes YAML template
