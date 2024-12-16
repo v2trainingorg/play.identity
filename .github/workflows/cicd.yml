@@ -104,11 +104,13 @@ jobs:
           GH_OWNER=${{ github.repository_owner }}
           GH_PAT=${{ secrets.GH_PAT }}
       
-    - name: Set Docker image tag      
+    - name: Set Docker image tag 
+      id: set_docker_image_tag     
       run: echo "docker_image_tag=${{ secrets.APP_NAME }}.azurecr.io/play.identity:${{ needs.generate-version.outputs.new_version }}" >> $GITHUB_ENV
 
     outputs:
-      docker_image_tag: ${{ env.docker_image_tag }}
+      docker_image_tag: ${{ steps.set_docker_image_tag.outputs.docker_image_tag }}
+      #docker_image_tag: ${{ env.docker_image_tag }}
 
 
   deploy-identity-service:
