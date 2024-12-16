@@ -137,7 +137,7 @@ jobs:
         run: echo "DOCKER_IMAGE=${{ needs.build_and_push_dockerimage.outputs.docker_image_tag }}" >> $GITHUB_ENV
       
       - name: Substitute variables in the Kubernetes YAML template
-        run: envsubst < identity-template.yaml > identity.yaml
+        run: envsubst < identity.yaml > identity-updated.yaml
 
       - name: Set AKS context
         run: az aks get-credentials --name ${{ secrets.APP_NAME }} --resource-group ${{ secrets.APP_NAME }}     
@@ -152,4 +152,4 @@ jobs:
       
       - name: Deploy Identity Service
         run: |
-          kubectl apply -f ./kubernetes/identity.yaml -n identity
+          kubectl apply -f ./kubernetes/identity-updated.yaml -n identity
