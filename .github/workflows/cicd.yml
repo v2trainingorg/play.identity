@@ -93,6 +93,7 @@ jobs:
     - name: Print new version to logs 
       run: echo "The new version is ${{ needs.generate-version.outputs.new_version }}"
 
+
     - name: Build and push Docker image
       uses: docker/build-push-action@v3
       with:
@@ -102,9 +103,10 @@ jobs:
         build-args: |
           GH_OWNER=${{ github.repository_owner }}
           GH_PAT=${{ secrets.GH_PAT }}
-        # secrets: |          
-        #   GH_PAT=${{secrets.GH_PAT}}
-
+      
+    - name: Set Docker image tag
+      id: set_tag
+      run: echo "::set-output name=image_tag::${{ secrets.APP_NAME }}.azurecr.io/play.identity:${{ needs.generate-version.outputs.new_version }}"
 
   deploy-identity-service:
     runs-on: ubuntu-latest
@@ -130,7 +132,12 @@ jobs:
             tenant-id: ${{secrets.TENANT_ID}}
             # Azure subscriptionId
             subscription-id: ${{secrets.SUBSCRIPTION_ID}}  
-
+        
+      - name: Set environment variables
+        run: echo "DOCKER_IMAGE=${{ needs.build_and_push_dockerimage.outputs.docker_image_tag }}" >> $GITHUB_ENV
+      
+      - name: Substitute variables in the Kubernetes YAML template
+        run: envsubst < identity-template.yaml > identity.yaml
 
       - name: Set AKS context
         run: az aks get-credentials --name ${{ secrets.APP_NAME }} --resource-group ${{ secrets.APP_NAME }}     
@@ -141,19 +148,7 @@ jobs:
 
       - name: Deploy Signing Cert
         run: |
-          kubectl apply -f ./kubernetes/signing-cer.yaml -n identity
-
-      # - name: Fetch Secret Name 
-      #   id: fetch-secret 
-      #   run: |
-      #     SECRET_NAME=$(kubectl get secret -n identity | grep 'signing-cert' | awk '{print $1}')     
-      #     if [ -z "$SECRET_NAME" ]; then exit 1; fi
-      #     echo "SECRET_NAME=$SECRET_NAME" >> $GITHUB_ENV
-
-      # - name: Deploy Identity Service
-      #   run: |
-      #     envsubst < ./kubernetes/identity.yaml > ./kubernetes/identity-subst.yaml
-      #     kubectl apply -f ./kubernetes/identity-subst.yaml -n identity           
+          kubectl apply -f ./kubernetes/signing-cer.yaml -n identity    
       
       - name: Deploy Identity Service
         run: |

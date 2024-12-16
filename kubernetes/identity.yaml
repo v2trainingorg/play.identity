@@ -15,7 +15,7 @@ spec:
       serviceAccountName: identity-serviceaccount
       containers:
         - name: identity
-          image: v2train.azurecr.io/play.identity:1.0.32
+          image: ${DOCKER_IMAGE}
           env:
             - name: ServiceSettings__MessageBroker
               value: SERVICEBUS
