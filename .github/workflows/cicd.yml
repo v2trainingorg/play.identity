@@ -106,7 +106,8 @@ jobs:
       
     - name: Set Docker image tag
       id: set_tag
-      run: echo "docker_image_tag=image_tag::${{ secrets.APP_NAME }}.azurecr.io/play.identity:${{ needs.generate-version.outputs.new_version }}" >> $GITHUB_ENV
+      run: echo "docker_image_tag=${{ secrets.APP_NAME }}.azurecr.io/play.identity:${{ needs.generate-version.outputs.new_version }}" >> $GITHUB_ENV
+
 
   deploy-identity-service:
     runs-on: ubuntu-latest
@@ -136,7 +137,7 @@ jobs:
     
 
       - name: Set environment variables
-        run: echo "DOCKER_IMAGE=${{ env.docker_image_tag }}" >> $GITHUB_ENV
+        run: echo "DOCKER_IMAGE=${{ env.docker_image_tag }}"
       
       - name: Verify Docker_IMAGE variable
         run: echo $DOCKER_IMAGE
