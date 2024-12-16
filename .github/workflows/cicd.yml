@@ -137,13 +137,15 @@ jobs:
             subscription-id: ${{secrets.SUBSCRIPTION_ID}}  
        
     
+      - name: Verify Docker image tag
+        run: echo ${{ env.docker_image_tag }}
 
-      - name: Set environment variables
-        run: echo "DOCKER_IMAGE=${{ env.docker_image_tag }}"
-      
-      - name: Verify Docker_IMAGE variable
-        run: echo $DOCKER_IMAGE
 
+      - name: Set and verifyenvironment variables
+        run: |
+          DOCKER_IMAGE=${{ env.docker_image_tag }}
+          echo $DOCKER_IMAGE
+   
       - name: Substitute variables in the Kubernetes YAML template
         run: envsubst < ./kubernetes/identity.yaml > ./kubernetes/identity-updated.yaml
 
