@@ -73,9 +73,6 @@ jobs:
       id-token: write
       contents: read
 
-    outputs: 
-      docker_image_tag: ${{ steps.set_tag.outputs.image_tag }}
-
     steps:
     - uses: actions/checkout@v3
 
@@ -109,7 +106,7 @@ jobs:
       
     - name: Set Docker image tag
       id: set_tag
-      run: echo "::set-output name=image_tag::${{ secrets.APP_NAME }}.azurecr.io/play.identity:${{ needs.generate-version.outputs.new_version }}"
+      run: echo "docker_image_tag=image_tag::${{ secrets.APP_NAME }}.azurecr.io/play.identity:${{ needs.generate-version.outputs.new_version }}" >> $GITHUB_ENV
 
   deploy-identity-service:
     runs-on: ubuntu-latest
