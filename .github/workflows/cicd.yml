@@ -138,12 +138,12 @@ jobs:
        
     
       - name: Verify Docker image tag
-        run: echo ${{ needs.build-and-push-dockerimage.docker_image_tag }}
+        run: echo ${{ needs.build-and-push-dockerimage.outputs.docker_image_tag }}
 
 
       - name: Set and verifyenvironment variables
         run: |
-          DOCKER_IMAGE=${{ needs.build-and-push-dockerimage.docker_image_tag }}
+          DOCKER_IMAGE=${{ needs.build-and-push-dockerimage.outputs.docker_image_tag }}
           echo $DOCKER_IMAGE
    
       - name: Substitute variables in the Kubernetes YAML template
