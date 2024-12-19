@@ -80,6 +80,6 @@ kind: ServiceAccount
 metadata:
   name: identity-serviceaccount
   annotations:
-    azure.workload.identity/client-id: ${{ secrets.IDENTITY_CLIENT_ID }}
+    azure.workload.identity/client-id: 78f6e101-6fc4-4012-930f-b90c7337c3c6
   labels:
     azure.workload.identity/use: "true"
