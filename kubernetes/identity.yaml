@@ -20,7 +20,7 @@ spec:
             - name: ServiceSettings__MessageBroker
               value: SERVICEBUS
             - name: ServiceSettings__KeyVaultName
-              value: v3train
+              value: v2train
             - name: IdentitySettings__PathBase
               value: /identity-svc
             - name: IdentitySettings__CertificateCerFilePath
@@ -28,9 +28,9 @@ spec:
             - name: IdentitySettings__CertificateKeyFilePath
               value: "/certificates/certificate.key"
             - name: IdentityServerSettings__Clients__0__RedirectUris__0
-              value: https://v3train.eastus.cloudapp.azure.com/authentication/login-callback
+              value: https://v2train.eastus.cloudapp.azure.com/authentication/login-callback
             - name: IdentityServerSettings__Clients__0__PostLogoutRedirectUris__0
-              value: https://v3train.eastus.cloudapp.azure.com/authentication/logout-callback              
+              value: https://v2train.eastus.cloudapp.azure.com/authentication/logout-callback              
           resources:
             limits:
               memory: "128Mi"
